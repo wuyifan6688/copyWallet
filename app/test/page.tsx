@@ -22,7 +22,9 @@ const Test: React.FC<TestProps> = (props) => {
     <div>
       <WagmiProvider config={config}>
         <QueryClientProvider client={queryClient}>
-          <Button></Button>
+          <div className="w-screen h-screen flex justify-center items-center bg-gray-500">
+            <Button></Button>
+          </div>
         </QueryClientProvider>
       </WagmiProvider>{" "}
     </div>
