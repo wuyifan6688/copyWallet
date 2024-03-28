@@ -34,7 +34,7 @@ const Alert: React.FC<AlertProps> = (props) => {
       //   1,
       // );
       onBalance(res.total);
-      console.log(res.total, res1, res2);
+      // console.log(res.total, res1, res2);
     } catch (e) {
       console.log("connect failed", e);
     }
