@@ -2,7 +2,7 @@ import { defineChain } from "viem";
 
 export const okxNet = defineChain({
   id: 66,
-  name: "Ethereum",
+  name: "Okt",
   nativeCurrency: {
     name: "OKT",
     symbol: "OKT",
