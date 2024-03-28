@@ -1,27 +1,45 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import metaMaskImage from "@/public/metaMask.png";
 import unisatImg from "@/public/unisat.png";
-import { useConnect, useSwitchChain } from "wagmi";
+import {
+  useAccount,
+  useConnect,
+  useSwitchChain,
+} from "wagmi";
 import { config } from "@/config";
 import { injected } from "@wagmi/core";
+import { metaMask } from "wagmi/connectors";
 interface AlertProps {
   onClose: () => void;
+  onIn: () => void;
+  onBalance: any;
 }
 const Alert: React.FC<AlertProps> = (props) => {
-  const { onClose } = props;
+  const { onClose, onIn, onBalance } = props;
   const { chains, switchChain } = useSwitchChain();
+  const account = useAccount();
   const handleUnisat = async () => {
     try {
       let accounts = await (
         window as any
       ).unisat.requestAccounts();
-      console.log("connect success", accounts);
+      onClose();
+      onIn();
+
+      let res = await (window as any).unisat.getBalance();
+      // let res1 = await (window as any).unisat.getNetwork();
+      // let res2 = await (window as any).unisat.switchNetwork(
+      //   1,
+      // );
+      onBalance(res.total);
+      console.log(res.total, res1, res2);
     } catch (e) {
-      console.log("connect failed");
+      console.log("connect failed", e);
     }
   };
+  useEffect(() => {}, []);
   const { connect } = useConnect({ config });
   return (
     <div className="inset-0 z-20 w-screen h-screen fixed bg-opacity-20 bg-black flex justify-center items-center text-white">
@@ -40,7 +58,7 @@ const Alert: React.FC<AlertProps> = (props) => {
               <div
                 className="flex items-center cursor-pointer"
                 onClick={() =>
-                  connect({ connector: injected() })
+                  connect({ connector: metaMask() })
                 }
               >
                 <Image

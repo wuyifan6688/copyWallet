@@ -27,6 +27,8 @@ const Button: React.FC<ButtonProps> = (props) => {
   const [message, setMessage] = useState("click me");
   const [show, setShow] = useState(false);
   const [showList, setShowList] = useState(false);
+  const [unisatBalance, setUnisatBalance] =
+    useState<any>(undefined);
   // const chainId = useChainId();
   // const chainId2 = getChainId(config);note 这两个都拿不到当前账户链
   const account = useAccount();
@@ -48,39 +50,6 @@ const Button: React.FC<ButtonProps> = (props) => {
     const connectNet = async () => {
       if (!account.chainId) return;
       console.log(account, "kk");
-      // config.chains.forEach((item) => {
-      //   if (item.id == chainId) return;
-      // });
-      // setShow(true);
-
-      // await switchChain(config, {
-      //   chainId: mainnet.id,
-      // });
-      // async function switchNet() {
-      //   let ethereum = window.ethereum;
-      //   const data = [
-      //     {
-      //       chainId: "0x42",
-      //       chainName: "OKXChain Mainnet",
-      //       nativeCurrency: {
-      //         name: "OKT",
-      //         symbol: "OKT",
-      //         decimals: 18,
-      //       },
-      //       rpcUrls: ["https://exchainrpc.okex.org"],
-      //     },
-      //   ];
-      //   /* eslint-disable */
-      //   const tx = await ethereum
-      //     .request({
-      //       method: "wallet_addEthereumChain",
-      //       params: data,
-      //     })
-      //     .catch();
-      //   if (tx) {
-      //     console.log(tx);
-      //   }
-      // }
 
       if (account.isConnected && judge()) {
         console.log("关闭");
@@ -109,7 +78,11 @@ const Button: React.FC<ButtonProps> = (props) => {
   return (
     <div>
       {show && !showList && (
-        <Alert onClose={() => setShow(false)}></Alert>
+        <Alert
+          onBalance={setUnisatBalance}
+          onClose={() => setShow(false)}
+          onIn={() => setMessage("连接成功")}
+        ></Alert>
       )}
       {showList && (
         <List onClose={() => setShowList(false)}></List>
@@ -124,7 +97,10 @@ const Button: React.FC<ButtonProps> = (props) => {
         >
           {message}
           -- 账户余额
-          {Number(result.data?.formatted).toFixed(2)}
+          {Number(
+            result.data?.formatted ||
+              unisatBalance?.toString(),
+          ).toFixed(2)}
           {result.data?.symbol}
         </button>
       ) : message == "click me" ? (
